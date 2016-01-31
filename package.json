@@ -1,0 +1,19 @@
+{
+  "name": "abone",
+  "version": "1.0.0",
+  "description": "Javascript class",
+  "main": "abone.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ruslan-molodyko/abone.git"
+  },
+  "author": "ruslan-molodyko <molodyko13@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ruslan-molodyko/abone/issues"
+  },
+  "homepage": "https://github.com/ruslan-molodyko/abone#readme"
+}
