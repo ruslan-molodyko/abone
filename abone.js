@@ -1,6 +1,7 @@
 /**
  * Created by molodyko on 22.12.2015.
  * Realization of class
+ 
  */
 Class = (function fn() {
     "use strict";
