@@ -1,82 +1,127 @@
 /**
- * Created by molodyko on 22.12.2015.
- * Realization of class
- 
+ * Javascript classes
+ * Created by Ruslan Molodyko
  */
-Class = (function() {
-    "use strict";
-    var fn = function(){};
-    return fn.o = new (function() {
+(function() {
 
-        this.constructor = function() {};
+    var Class = (function fn() {
+        "use strict";
 
         /**
-         * This is static function of class
-         * Which creates some class by function container
-         * @param fn
-         * @returns {Function}
+         * Use fn as object container
          */
-        this.constructor.create = function(fn, parent) {
-
-            // Get error if first arg is not a function
-            if (typeof fn !== 'function') {
-                throw new Error('Fn is not a function');
-            }
+        return fn.o = new (function() {
 
             /**
-             * If parent is object then add it to top of prototype inheritance
-             * For call parent constructor is it is exists call:
-             *     this.parentClass.constructor.call(this, panel);
+             * Create constructor of raw class
              */
-            if (typeof parent === 'function') {
+            this.constructor = function() {};
 
-                fn.prototype = this.self.cloneObject(parent.prototype, fn.prototype);
-                fn.prototype.parentClass = fn.prototype;
-            }
+            /**
+             * This is static function of class
+             * Which creates some class by function container
+             *
+             * @param fn
+             * @returns {Function}
+             */
+            this.constructor.create = function(fn, parent) {
 
-            // Create new object by passed function
-            var o = new fn();
-
-            // If new class hasn't define constructor then set default
-            if (o.constructor === fn) {
-                o.constructor = function() {};
-            }
-
-            // Set link to constructor and self to get static variables
-            o.self = constructor;
-
-            // Set prototype to constructor
-            o.constructor.prototype = o;
-
-            // Add get instance method for each class
-            o.constructor.getInstance = function() {
-                var p = function() {};
-                p.prototype = o;
-                var p1 = new p();
-                if (this.instance == null) {
-                    o.constructor.apply(p1, arguments);
-                    this.instance = p1;
+                /**
+                 * Get error if first arg is not a function
+                 */
+                if (typeof fn !== 'function') {
+                    throw new Error('Fn is not a function');
                 }
-                return this.instance;
+
+                var hasConstructor = !((new fn()).constructor === fn),
+                    hasParent = typeof parent === 'function';
+
+                /**
+                 * If need inherite classes
+                 * If parent is object then add it to top of prototype inheritance
+                 *
+                 * For call parent constructor is it is exists call:
+                 * this.parentClass.constructor.call(this, panel);
+                 * this.parentClass.constructor.apply(this, arguments)
+                 */
+                if (hasParent) {
+
+                    /**
+                     * Inheritate prototype of classes
+                     * @type {Object}
+                     */
+                    fn.prototype = parent.prototype;
+                    fn.prototype.parentClass = parent.prototype;
+                }
+
+                /**
+                 * Create new object by passed function
+                 */
+                var o = new fn();
+
+                /**
+                 * If new class hasn't define constructor then set default
+                 */
+                if (!hasConstructor && !hasParent) {
+                    o.constructor = function() {};
+
+                    /**
+                     * If new class hasn't define constructor then set default
+                     * And has parent class
+                     */
+                } else if (!hasConstructor && hasParent) {
+
+                    /**
+                     * Set default constructor which will be call prent constructor with arguments
+                     */
+                    o.constructor = function() {
+                        this.parentClass.constructor.apply(this, arguments);
+                    };
+                }
+
+                /**
+                 * Set link to constructor and self to get static variables
+                 */
+                o.self = constructor;
+
+                /**
+                 * Set prototype to constructor
+                 */
+                o.constructor.prototype = o;
+
+                /**
+                 * Add get instance method for each class
+                 * @returns {p|*|p1}
+                 */
+                o.constructor.getInstance = function() {
+                    if (this.instance == null) {
+
+                        // Create context for use as context of costructor
+                        var context = Object(o);
+
+                        // Call constructor with arguments
+                        o.constructor.apply(context, arguments);
+
+                        // Save instance
+                        this.instance = context;
+                    }
+                    return this.instance;
+                };
+
+                /**
+                 * Return class constructor
+                 */
+                return o.constructor;
             };
+        })(), fn.o.constructor.prototype = fn.o, fn.o.constructor.self = fn.o.constructor, fn.o.constructor;
+    })();
 
-            // Return constructor
-            return o.constructor;
-        };
-
-        this.constructor.cloneObject = function(origin, add) {
-            // Don't do anything if add isn't an object
-            if (!add || typeof add !== 'object') return origin;
-
-            var keys = Object.keys(add);
-            var i = keys.length;
-            while (i--) {
-                origin[keys[i]] = add[keys[i]];
-            }
-            return origin;
-        };
-
-    })(), fn.o.constructor.prototype = fn.o, fn.o.constructor.self = fn.o.constructor, fn.o.constructor;
+    /**
+     * Export script to nodejs or browser
+     */
+    if (module != null && typeof module.exports !== 'undefined') {
+        module.exports = Class;
+    } else {
+        window['ABone'] = Class;
+    }
 })();
-
-module.exports = Class;

@@ -27,6 +27,12 @@ describe("Inheritance", function() {
         }
     });
 
+    var cl = ABone.create(function() {
+        this.some = function() {
+            return '123';
+        };
+    });
+
     var classA = ABone.create(function() {
 
         this.constructor = function() {
@@ -62,6 +68,12 @@ describe("Inheritance", function() {
             this.name = 'parent-b';
         }
     }, parent);
+
+    it("Default constructor", function() {
+        var c = new cl();
+
+        expect(c.some()).to.eql('123');
+    });
 
     it("Right initialization", function() {
         var a = new classA(),
@@ -107,22 +119,5 @@ describe("Inheritance", function() {
 
         expect(a).to.have.property('name', 'parent-a');
         expect(b).to.have.property('name', 'parent-b');
-    });
-
-    it("Clone object method", function() {
-        var parent = {name: 'parent', someVal: 'someVal'},
-            child = {name: 'child'},
-            parent1 = parent,
-            child1 = child;
-
-        expect(ABone.cloneObject(parent, {})).to.eql({name: 'parent', someVal: 'someVal'});
-
-        expect(parent).to.eql({name: 'parent', someVal: 'someVal'});
-        expect(child).to.eql({name: 'child'});
-
-        expect(parent).to.eql(parent1);
-        expect(child).to.eql(child1);
-
-        expect(ABone.cloneObject(parent, child)).to.eql({name: 'child', someVal: 'someVal'});
     });
 });
