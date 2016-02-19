@@ -1,6 +1,6 @@
 /**
  * Javascript classes
- * Created by Ruslan Molodyko
+ * Created by Ruslan Molodyko 
  */
 (function() {
 
