@@ -96,7 +96,7 @@ describe("Inheritance", function() {
             b = new classB();
 
         expect(a).to.not.have.property('parent');
-        expect(b).to.have.property('parent');
+        expect(b).to.not.have.property('parent');
     });
 
     it("Right context", function() {
