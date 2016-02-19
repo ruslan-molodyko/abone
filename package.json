@@ -4,11 +4,14 @@
   "description": "Javascript class",
   "main": "abone.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha -R spec ./test/index.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ruslan-molodyko/abone.git"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0"
   },
   "author": "ruslan-molodyko <molodyko13@gmail.com>",
   "license": "ISC",
