@@ -1,6 +1,6 @@
 /**
  * Javascript classes
- * Created by Ruslan Molodyko 
+ * Created by Ruslan Molodyko
  */
 (function() {
 
@@ -11,6 +11,12 @@
          * Use fn as object container
          */
         return fn.o = new (function() {
+
+            /**
+             * Save link to class
+             * @type {Class}
+             */
+            var self = this;
 
             /**
              * Create constructor of raw class
@@ -61,15 +67,12 @@
 
                 /**
                  * If new class hasn't define constructor then set default
+                 * And has parent class
                  */
-                if (!hasConstructor && !hasParent) {
-                    o.constructor = function() {};
+                if (!hasConstructor && hasParent) {
 
-                    /**
-                     * If new class hasn't define constructor then set default
-                     * And has parent class
-                     */
-                } else if (!hasConstructor && hasParent) {
+                    // Save previous constructor
+                    var selfConstructor = o.constructor;
 
                     /**
                      * Set default constructor which will be call prent constructor with arguments
@@ -77,6 +80,17 @@
                     o.constructor = function() {
                         this.parentClass.constructor.apply(this, arguments);
                     };
+
+                    /**
+                     * Add static properties from parent class
+                     */
+                    self.extend(o.constructor, o.parentClass.constructor);
+
+
+                    /**
+                     * Add static properties from this class
+                     */
+                    self.extend(o.constructor, selfConstructor);
                 }
 
                 /**
@@ -113,6 +127,21 @@
                  */
                 return o.constructor;
             };
+
+            /**
+             * Add properties first level from one object to another
+             *
+             * @param dest
+             * @param source
+             */
+            this.extend = function (dest, source) {
+                for (var i in source) {
+                    if (source.hasOwnProperty(i)) {
+                        dest[i] = source[i];
+                    }
+                }
+            };
+
         })(), fn.o.constructor.prototype = fn.o, fn.o.constructor.self = fn.o.constructor, fn.o.constructor;
     })();
 

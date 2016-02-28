@@ -25,6 +25,10 @@ describe("Inheritance", function() {
         this.o = function() {
             this.name = 'parent-o';
         }
+
+        this.constructor.parentStaticMethod = function () {
+            return 'parent';
+        }
     });
 
     var cl = ABone.create(function() {
@@ -69,6 +73,28 @@ describe("Inheritance", function() {
         }
     }, parent);
 
+    var StaticClassMethod = ABone.create(function () {
+        "use strict";
+        this.constructor.staticMethod = function () {
+            return 'ok'
+        };
+    });
+
+    var StaticClassMethodInheritance = ABone.create(function () {
+        "use strict";
+        this.constructor.staticMethod = function () {
+            return 'ok'
+        };
+    }, parent);
+
+
+    var ParentStaticClassMethod = ABone.create(function () {
+        "use strict";
+        this.constructor.staticMethod1 = function () {
+            return 'ok'
+        };
+    }, parent);
+
     it("Default constructor", function() {
         var c = new cl();
 
@@ -81,6 +107,19 @@ describe("Inheritance", function() {
 
         expect(a).to.have.property('name', 'classA');
         expect(b).to.have.property('name', 'classB');
+    });
+
+    it("One static method without define constructor", function() {
+        expect(StaticClassMethod.staticMethod()).to.be.eql('ok');
+    });
+
+    it("One static method of inherited class without define constructor", function() {
+        expect(StaticClassMethodInheritance.staticMethod()).to.be.eql('ok');
+    });
+
+    it("One static method from parent class without define constructor", function() {
+        expect(ParentStaticClassMethod.staticMethod1()).to.be.eql('ok');
+        expect(ParentStaticClassMethod.parentStaticMethod()).to.be.eql('parent');
     });
 
     it("Access to child properties", function() {
