@@ -148,7 +148,7 @@
     /**
      * Export script to nodejs or browser
      */
-    if (module != null && typeof module.exports !== 'undefined') {
+    if (typeof module !== "undefined" && typeof module.exports !== 'undefined') {
         module.exports = Class;
     } else {
         window['ABone'] = Class;
